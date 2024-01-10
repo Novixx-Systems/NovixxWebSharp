@@ -2,6 +2,10 @@
 
 Novixx WebSharp is a library to create websites in C#! It is easy to use.
 
+# How to install?
+
+Either go to the releases tab, or install it [from NuGet](https://www.nuget.org/packages/NovixxWebSharp)
+
 # How to use?
 
 Import the library (obviously) and then create a new instance of the `Website` class.
