@@ -6,6 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Novixx WebSharp</Title>
+    <Version>$(VersionPrefix)</Version>
+    <Authors>Novixx Systems and Contributors</Authors>
+    <Company>Novixx Systems</Company>
+    <Description>Novixx WebSharp is a library for creating websites in C#</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Novixx-Systems/NovixxWebSharp</RepositoryUrl>
+    <PackageTags>website;server;http server</PackageTags>
+    <PackageId>NovixxWebSharp</PackageId>
   </PropertyGroup>
 
 </Project>
