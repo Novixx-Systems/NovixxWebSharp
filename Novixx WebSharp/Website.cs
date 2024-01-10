@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Security.Principal;
 using System.Text;
 
@@ -11,7 +12,7 @@ namespace Novixx.WebSharp
         public string footer { get; set; }
         public int Port { get; set; }
 
-        public List<Page> Pages { get; set; }
+        public List<Page> Pages { get; set; } = new List<Page>();
 
         public Website() { }
 
@@ -23,6 +24,9 @@ namespace Novixx.WebSharp
             Port = port;
         }
 
+        /// <summary>
+        /// Runs the website on the specified port
+        /// </summary>
         public void Run()
         {
             var listener = new HttpListener();
@@ -51,29 +55,41 @@ namespace Novixx.WebSharp
                 {
                     var request = context.Request;
                     var response = context.Response;
-                    var path = request.Url.AbsolutePath;
-                    var page = Pages.FirstOrDefault(p => p.Name == path);
-                    if (page != null)
+                    try
                     {
-                        if (request.HttpMethod == "GET")
+                        var path = request.Url.AbsolutePath;
+                        var page = Pages.FirstOrDefault(p => p.Name == path);
+                        if (page != null)
                         {
-                            page.OnGet?.Invoke();
+                            string content = page.Content;
+                            if (request.HttpMethod == "GET")
+                            {
+                                content = page.OnGet?.Invoke() ?? content;
+                            }
+                            else if (request.HttpMethod == "POST")
+                            {
+                                content = page.OnPost?.Invoke() ?? content;
+                            }
+                            var buffer = Encoding.UTF8.GetBytes(header + content + footer);
+                            response.ContentType = "text/html";
+                            response.ContentLength64 = buffer.Length;
+                            response.OutputStream.Write(buffer, 0, buffer.Length);
                         }
-                        else if (request.HttpMethod == "POST")
+                        else
                         {
-                            page.OnPost?.Invoke();
+                            var buffer = Encoding.UTF8.GetBytes($"<h1>404 Not Found</h1><p>The requested URL {path} was not found on this server.</p>");
+                            response.ContentLength64 = buffer.Length;
+                            response.OutputStream.Write(buffer, 0, buffer.Length);
                         }
-                        var buffer = Encoding.UTF8.GetBytes(page.Content);
+                        response.OutputStream.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        var buffer = Encoding.UTF8.GetBytes($"<h1>404 Not Found</h1><p>The requested URL was not found on this server.</p>");
                         response.ContentLength64 = buffer.Length;
                         response.OutputStream.Write(buffer, 0, buffer.Length);
                     }
-                    else
-                    {
-                        var buffer = Encoding.UTF8.GetBytes($"<h1>404 Not Found</h1><p>The requested URL {path} was not found on this server.</p>");
-                        response.ContentLength64 = buffer.Length;
-                        response.OutputStream.Write(buffer, 0, buffer.Length);
-                    }
-                    response.OutputStream.Close();
                 }).Start();
             }
         }
