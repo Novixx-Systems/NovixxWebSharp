@@ -2,10 +2,22 @@
 {
     public class Page
     {
+        /// <summary>
+        /// The name of the page, use / for index
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// The content of the page, will be used if OnGet and/or OnPost return null, or are not specified at all
+        /// </summary>
         public string Content { get; set; }
-        public Func<string> OnGet { get; set; }
-        public Func<string> OnPost { get; set; }
+        /// <summary>
+        /// A function that gets executed on a GET request
+        /// </summary>
+        public Func<Request, string> OnGet { get; set; }
+        /// <summary>
+        /// A function that gets executed on a POST request
+        /// </summary>
+        public Func<Request, string> OnPost { get; set; }
 
         public Page() { }
 
@@ -22,7 +34,7 @@
         /// <param name="content">The content of the page, will be used if OnGet and/or OnPost return null</param>
         /// <param name="onGet">A function that gets executed on a GET request</param>
         /// <param name="onPost">A function that gets executed on a POST request</param>
-        public Page(string name, string content, Func<string> onGet, Func<string> onPost)
+        public Page(string name, string content, Func<Request, string> onGet, Func<Request, string> onPost)
         {
             Name = name;
             Content = content;
@@ -36,7 +48,7 @@
         /// <param name="name">The name of the page, use / for index</param>
         /// <param name="content">The content of the page, will be used if OnPost returns null</param>
         /// <param name="onPost">A function that gets executed on a POST request</param>
-        public Page(string name, string content, Func<string> onPost)
+        public Page(string name, string content, Func<Request, string> onPost)
         {
             Name = name;
             Content = content;
@@ -49,7 +61,7 @@
         /// <param name="name">The name of the page, use / for index</param>
         /// <param name="onGet">A function that gets executed on a GET request</param>
         /// <param name="onPost">A function that gets executed on a POST request</param>
-        public Page(string name, Func<string> onGet, Func<string> onPost)
+        public Page(string name, Func<Request, string> onGet, Func<Request, string> onPost)
         {
             Name = name;
             OnGet = onGet;

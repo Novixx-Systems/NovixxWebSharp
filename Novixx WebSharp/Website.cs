@@ -7,11 +7,25 @@ namespace Novixx.WebSharp
 {
     public class Website
     {
+        /// <summary>
+        /// The name of the website
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// The header of the website, will be prepended to every page
+        /// </summary>
         public string header { get; set; }
+        /// <summary>
+        /// The footer of the website, will be appended after every page
+        /// </summary>
         public string footer { get; set; }
+        /// <summary>
+        /// Port number, 8080 recommended for development
+        /// </summary>
         public int Port { get; set; }
-
+        /// <summary>
+        /// The list of pages on the website, use Pages.Add() to add a page
+        /// </summary>
         public List<Page> Pages { get; set; } = new List<Page>();
 
         public Website() { }
@@ -64,11 +78,11 @@ namespace Novixx.WebSharp
                             string content = page.Content;
                             if (request.HttpMethod == "GET")
                             {
-                                content = page.OnGet?.Invoke() ?? content;
+                                content = page.OnGet?.Invoke(new Request(context)) ?? content;
                             }
                             else if (request.HttpMethod == "POST")
                             {
-                                content = page.OnPost?.Invoke() ?? content;
+                                content = page.OnPost?.Invoke(new Request(context)) ?? content;
                             }
                             var buffer = Encoding.UTF8.GetBytes(header + content + footer);
                             response.ContentType = "text/html";

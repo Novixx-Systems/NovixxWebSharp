@@ -8,7 +8,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Novixx WebSharp</Title>
-    <Version>$(VersionPrefix)</Version>
+    <Version>1.0.1</Version>
     <Authors>Novixx Systems and Contributors</Authors>
     <Company>Novixx Systems</Company>
     <Description>Novixx WebSharp is a library for creating websites in C#</Description>
